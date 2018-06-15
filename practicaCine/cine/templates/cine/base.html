@@ -10,10 +10,10 @@
     </head>
     <body>
         <!-- Menús -->
-        <nav>
-            <ul>
-                <li><a href="{% url 'cine:index' %}">Home</a></li>
-                <li><a href="{% url 'cine:cartelera' %}">Cartelera</a></li>
+        <nav id="navMenu">
+            <ul id="ulMenu">
+                <li class="liMenu"><a href="{% url 'cine:cartelera' %}">Cartelera</a></li>
+                <li class="liMenu"><a href="{% url 'cine:reservas' %}">Reservas</a></li>
             </ul>
         </nav>
         
