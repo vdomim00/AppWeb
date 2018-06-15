@@ -4,11 +4,9 @@ from .models import Pelicula
 from .models import Comentario
 
 # Create your views here.
-
 def index(request):
-    return render(request, 'cine/index.html')
+    return  render(request, 'cine/index.html')
 
-#Cartelera
 def cartelera(request):
     peliculas = Pelicula.objects.all().order_by('-titulo')
-    return render(request, 'cine/cartelera.html', {'peliculas': peliculas})
+    return  render(request, 'cine/cartelera.html', {'peliculas': peliculas})
