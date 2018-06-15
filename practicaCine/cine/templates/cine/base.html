@@ -1,0 +1,29 @@
+{% load static %}
+<DOCTYPE html>
+    <html>
+    <head>
+        {% block scripts %}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <link rel="stylesheet" href='{% static "cine/css/style.css" %}'>
+            <script src='{% static "cine/js/script.js" %}'></script>
+        {% endblock %}
+    </head>
+    <body>
+        <!-- Menús -->
+        <nav>
+            <ul>
+                <li><a href="{% url 'cine:index' %}">Home</a></li>
+                <li><a href="{% url 'cine:cartelera' %}">Cartelera</a></li>
+            </ul>
+        </nav>
+        
+        <div id="content">
+            {% block contenido %}
+            {% endblock %}
+        </div>
+        
+        <!-- Pie de página -->
+        <footer>YespANDRiesCo</footer>
+    </body>
+    </html>
+</DOCTYPE>

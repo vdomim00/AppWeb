@@ -1,0 +1,17 @@
+{% extends "./base.html" %}
+
+{% block contenido %}
+    <h1>Películas en Cartelera</h1>
+
+    {% if peliculas %}
+
+        <ul class="cartelera">
+        {% for pelicula in peliculas %}
+            <li>
+                {% include "./pelicula.html" %}
+            </li>
+        {% endfor %}
+        </ul>
+
+    {% endif %}
+{% endblock %}
