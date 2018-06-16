@@ -3,15 +3,37 @@
 {% block contenido %}
     <h1>Películas en Cartelera</h1>
 
-    {% if peliculas %}
+    <form action="/cartelera" method="GET">{% csrf_token %}
+        <label for="q">Buscar: </label>
+        <input type="text" name="q" value="{{ query|escape }}">
+        <input type="submit" value="Buscar">
+    </form>
 
-        <ul class="cartelera">
-        {% for pelicula in peliculas %}
-            <li>
-                {% include "./pelicula.html" %}
-            </li>
-        {% endfor %}
-        </ul>
+    {% if query %}
+    <h2>Resultados para "{{ query|escape }}":</h2>
+ 
+        {% if peliculas %}
+          <ul>
+              {% for pelicula in peliculas %}
+              <li>
+                  {% include "./pelicula.html" %}
+              </li>
+              {% endfor %}
+          </ul>
+        {% else %}
+          <p>No se encuentran peliculas</p>
+        {% endif %}
+    {% else %}
+        {% if peliculas %}
 
+            <ul class="cartelera">
+            {% for pelicula in peliculas %}
+                <li>
+                    {% include "./pelicula.html" %}
+                </li>
+            {% endfor %}
+            </ul>
+
+        {% endif %}
     {% endif %}
 {% endblock %}

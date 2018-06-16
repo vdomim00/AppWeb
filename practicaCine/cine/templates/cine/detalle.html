@@ -1,1 +1,37 @@
 {% extends "./base.html" %}
+
+{% block contenido %}
+    <h1>Detalle de Pelicula</h1>
+
+    {% if pelicula %}
+
+    <img src='{{ pelicula.foto.url }}'/>
+    <h5>{{ pelicula.titulo }}</h5>
+    <p id="director">{{ pelicula.director }}</p>
+    <p id="genero">{{ pelicula.genero }}</p>
+    <p id="sinopsis">{{ pelicula.sinopsis }}</p>
+
+    {% endif %}
+
+    {% if sesiones %}
+    <div id="sesiones">
+        <h4>Sesiones:</h4>
+        {% for sesiones in sesiones %}
+                <h6>Hora:</h6>
+                <p> {{ sesiones.hora }}</p>
+                <h6>Sala:</h6>
+                <p> {{ sesiones.sala_id }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if comentarios %}
+    <div id="comentarios">
+        <h4>Comentarios:</h4>
+        {% for comentarios in comentarios %}
+                <p> {{ comentarios.asunto }}</p>
+                <p> {{ comentarios.opinion }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endblock %}
