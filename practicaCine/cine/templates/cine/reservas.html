@@ -1,1 +1,45 @@
 {% extends "./base.html" %}
+
+{% block contenido %}
+    <h1>Lista de sesiones disponibles</h1>
+
+    <form action="/reservas" method="GET">{% csrf_token %}
+        <label for="filtroPeli">Película</label>
+        <select name="filtroPeli">
+            {% for pelicula in peliculas %}
+                <option value="{{ pelicula.titulo }}" {% if filtroPeli == '{{ pelicula.titulo }}' %}selected{% endif %}/>
+            {% endfor %}
+        </select>
+        <label for="filtroSesion">Sesion</label>
+        <select name="filtroSesion">
+            {% for sesion in sesiones %}
+                <option id="{{ sesion.id }}" value="{{ sesion.fecha }} - {{ sesion.hora }}"/>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Cargar">
+    </form>
+    <div id="divSalas">
+        <label for="filtroSala">Sala</label>
+        <select id="filtroSala" name="filtroSala" onchange="filtroSala()">
+            {% for sala in salas %}
+                <option value="{{ sala.numeroSala }}"/>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="divAsientos">
+        {% if sala %}
+            <form id="checkReserva" action="" method="">
+            {% for counterFila in sala.numeroFilas %}
+                {% for counterColumna in sala.numeroAsientosFila %}
+                    <input type="checkbox" name="asiento"/>
+                {% endfor %}
+            {% endfor %}
+            {% for counterColumna in sala.numeroAsientosFila %}
+                    <input type="checkbox" name="asiento"/>
+            {% endfor %}
+            </form>
+        {% endif %}
+    </div>
+
+{% endblock %}

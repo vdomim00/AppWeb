@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.db.models import Q
 from .models import Pelicula, Sala, Comentario, Sesion, Reserva, Asiento
+import datetime
+from django.utils import timezone
 
 # Create your views here.
 
@@ -11,31 +13,130 @@ def index(request):
 #Cartelera
 def cartelera(request):
     
-    query = request.GET.get('q', '')
-    if query:
-        qset = (
-            Q(titulo__icontains=query) |
-            Q(director__icontains=query)
-        )
-        peliculas = Pelicula.objects.filter(qset)
+    # Comprobamos los filtros, primero el de género y luego el de título y autor
+    gen = request.GET.get('filtroG')
+    if gen:
+        if gen!='todo':
+            peliculas = Pelicula.objects.filter(genero=gen)
+            query = request.GET.get('q', '')
+            if query:
+                qset = (
+                    Q(titulo__icontains=query) |
+                    Q(director__icontains=query)
+                )
+                peliculas = peliculas.filter(qset)
+            else:
+                peliculas = peliculas.all().order_by('-titulo')
+        else:
+            query = request.GET.get('q', '')
+            if query:
+                qset = (
+                    Q(titulo__icontains=query) |
+                    Q(director__icontains=query)
+                )
+                peliculas = Pelicula.objects.filter(qset)
+            else:
+                peliculas = Pelicula.objects.all().order_by('-titulo')
     else:
-        peliculas = Pelicula.objects.all().order_by('-titulo')
+        query = request.GET.get('q', '')
+        if query:
+            qset = (
+                Q(titulo__icontains=query) |
+                Q(director__icontains=query)
+            )
+            peliculas = Pelicula.objects.filter(qset)
+        else:
+            peliculas = Pelicula.objects.all().order_by('-titulo')
+            
+    # Aquí tendríamos las películas que cumplen ambos filtros, ahora tenemos que obtener las que tienen sesiones posteriores
+    # Primero extraemos las sesiones que están relacionadas con alguna de las películas ya filtradas
+    sesiones = Sesion.objects.none()
+    for pelicula in peliculas:
+        sesiones = sesiones | Sesion.objects.filter(pelicula_id=pelicula.id)
     
-    return render(request, 'cine/cartelera.html', {'peliculas': peliculas, 'query': query})
+    # Filtramos las sesiones de manera que todas tengan una fecha con día igual o posterior, y hora posterior al momento de búsqueda
+    sesiones = sesiones.filter(fecha__gte=datetime.date.today()).exclude(
+        fecha=datetime.date.today(),
+        hora__lte=datetime.datetime.now().strftime('%H:%M:%S')
+        )
+        
+    # Comprobamos las películas que tienen sesiones en el conjunto anterior, y las añadimos al conjunto de películas final
+    peliculas_final = Pelicula.objects.none()
+    for sesion in sesiones: 
+        if not peliculas_final.filter(pk=sesion.pelicula_id):
+            peliculas_final = peliculas_final | peliculas.filter(pk=sesion.pelicula_id)
+    
+    # Devolvemos el conjunto final de películas, junto con la query y el filtro anterior
+    return render(request, 'cine/cartelera.html', {'peliculas': peliculas_final, 'query': query, 'filtroG': gen})
 
 def reservas(request):
     peliculas = Pelicula.objects.all().order_by('-titulo')
-    return render(request, 'cine/reservas.html', {'peliculas': peliculas})
-
-#def detalle(request):
-#   peliculas = Pelicula.objects.all().order_by('-titulo')
-#  return render(request, 'cine/detalle.html', {'peliculas': peliculas})
+    sesiones = Sesion.objects.none()
+    salas = Sala.objects.none()
+    peli = request.GET.get('filtroPeli')
+    sesi = request.GET.get('filtroSesion')
+    sal = request.GET.get('filtroSala')
+    
+    if peli:
+        pelicul = peliculas.filter(titulo=peli)
+        sesiones = Sesion.objects.filter(pelicula_id=pelicul.first().id)
+        
+        if sesi:
+            sesion = sesiones.filter(pk=sesi)
+            if not salas.filter(pk=sesion.sala_id):
+                salas = salas | Sala.objects.filter(pk=sesion.sala_id)
+            for pelicula in peliculas:
+                sesiones = sesiones | Sesion.objects.filter(pelicula_id=pelicula.id)
+            sesiones = sesiones.filter(fecha__gte=datetime.date.today()).exclude(
+                fecha=datetime.date.today(),
+                hora__lte=datetime.datetime.now().strftime('%H:%M:%S')
+                )
+            peliculas_final = Pelicula.objects.none()
+            for sesion in sesiones: 
+                if not peliculas_final.filter(pk=sesion.pelicula_id):
+                    peliculas_final = peliculas_final | peliculas.filter(pk=sesion.pelicula_id)
+        else:
+            for pelicula in peliculas:
+                sesiones = sesiones | Sesion.objects.filter(pelicula_id=pelicula.id)
+            sesiones = sesiones.filter(fecha__gte=datetime.date.today()).exclude(
+                fecha=datetime.date.today(),
+                hora__lte=datetime.datetime.now().strftime('%H:%M:%S')
+                )
+            peliculas_final = Pelicula.objects.none()
+            for sesion in sesiones: 
+                if not peliculas_final.filter(pk=sesion.pelicula_id):
+                    peliculas_final = peliculas_final | peliculas.filter(pk=sesion.pelicula_id)
+    else:
+        for pelicula in peliculas:
+            sesiones = sesiones | Sesion.objects.filter(pelicula_id=pelicula.id)
+        sesiones = sesiones.filter(fecha__gte=datetime.date.today()).exclude(
+            fecha=datetime.date.today(),
+            hora__lte=datetime.datetime.now().strftime('%H:%M:%S')
+            )
+        peliculas_final = Pelicula.objects.none()
+        for sesion in sesiones: 
+            if not peliculas_final.filter(pk=sesion.pelicula_id):
+                peliculas_final = peliculas_final | peliculas.filter(pk=sesion.pelicula_id)
+    
+    return render(request, 'cine/reservas.html', {'peliculas': peliculas_final, 'sesiones': sesiones, 'salas': salas, 'filtroPeli': peli, 'filtroSesion': sesi, 'filtroSala': sal})
 
 def detalle(request, id_pelicula):
     try:
         pelicula = Pelicula.objects.get(pk=id_pelicula)
-        comentarios = Comentario.objects.filter(pelicula_id=id_pelicula)
+        comentarios = Comentario.objects.filter(pelicula_id=id_pelicula).order_by('-id')[:3]
         sesiones = Sesion.objects.filter(pelicula_id=id_pelicula)
     except:
         raise Http404('La pelicula no existe')
     return render(request, 'cine/detalle.html', {'pelicula': pelicula, 'comentarios': comentarios, 'sesiones': sesiones})
+
+def guardarComentario(request):
+    try:
+        if request.POST["pelicula_id"] and request.POST["asunto"] and request.POST["opinion"]:
+            Comentario.objects.create(asunto=request.POST["asunto"], opinion=request.POST["opinion"], pelicula_id=request.POST["pelicula_id"])
+            pelicula = Pelicula.objects.get(pk=request.POST["pelicula_id"])
+            comentarios = Comentario.objects.filter(pelicula_id=request.POST["pelicula_id"]).order_by('-id')[:3]
+            sesiones = Sesion.objects.filter(pelicula_id=request.POST["pelicula_id"])
+            return render(request, 'cine/detalle.html', {'pelicula': pelicula, 'comentarios': comentarios, 'sesiones': sesiones})
+    except:
+        raise Http404('Error al crear el comentario')
+    return render(request, 'cine/cartelera.html')
