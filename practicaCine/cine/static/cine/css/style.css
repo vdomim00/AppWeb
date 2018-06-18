@@ -1,9 +1,12 @@
 body {
-    background-color: #ffffff;
+    background-image: url(../images/background.jpg);
+    background-attachment: fixed;
     font-size: 12px;
     font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
     color: #000000;  
-    margin: 10px;
+    background-position: center;
+    display: block;
+
 }
 
 h1 {
@@ -26,12 +29,7 @@ h2 {
 }
 
 h3 {
-    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
-    font-size:  16px;
-    font-weight: lighter;
-    margin: 2px;
-    padding: 5px;
-    color: #D20005;
+    
 
 }
 
@@ -57,4 +55,196 @@ a:link:hover, a:visited:hover  {
   color: #045491;
   font-weight : bold;
   text-decoration : underline;
+}
+#navMenu {
+}
+
+#ulMenu {
+    position:fixed;
+    z-index: 1;
+	width: 100%;
+	list-style:none;
+    margin:10px 10px 10px 10px;
+    padding:0;
+    background-image: -moz-linear-gradient(top center, #FFF, #CCC);/*Para Firefox*/
+    background-image: linear-gradient(#FFF, #CCC);
+    border-radius:15px;/*Para Firefox*/
+}
+
+.liMenu {
+    -moz-border-radius:5px;/*Firefox*/
+    border-radius: 5px;
+    border-radius:15px;/*Estandar por defecto*/
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:16px;
+    font-weight:bold;
+    margin:0 5px 0 5px;
+    text-align:center;
+    display: block;
+    float: left;
+    /*Sombras para texto, los mismos parametros que box-shadow*/
+    text-shadow: 0px 1px 0px #FFF;
+    padding:15px;
+}
+
+#content {
+    padding-top: 5%;
+}
+
+#footer {
+    text-align: center;
+}
+
+.titulo {
+    text-align: center;
+}
+
+#filtros {
+    text-align: center;
+    background-color: darkgray;
+    margin: auto;
+    width: 65%;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.portada {
+    opacity: 1;
+    margin-left: 15px;
+    margin-top: 15px;
+    display: block;
+    width: 300px;
+    height: 300px;
+}
+
+.portada img{
+    opacity: 1;
+}
+
+.pelicula {
+    background-color: cornflowerblue;
+    opacity: 0.8;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    margin:auto;
+    border-radius:15px;
+    margin-bottom: 15px;
+    width: 80%;
+
+}
+
+#genero {
+    display: block;
+}
+
+.titulo_peli {
+    display: block;
+    text-align: center;
+    
+}
+
+.enlace_peli {
+    display: block;
+}
+
+.foto_titulo {
+    text-align: center;
+}
+
+.info_peli {
+    text-align: justify;
+    width: 400px;
+    border: 2px solid #AFAFAF;
+    margin: 15px;
+    padding: 5px;
+}
+
+#sesiones {
+    background-color: cornflowerblue;
+    opacity: 0.8;
+    grid-template-columns: auto auto auto;
+    margin:auto;
+    border-radius:15px;
+    margin-bottom: 15px;
+    width: 80%;
+    padding: 10px;
+}
+
+#comentarios {
+    background-color: cornflowerblue;
+    opacity: 0.8;
+    grid-template-columns: auto auto auto;
+    margin:auto;
+    border-radius:15px;
+    margin-bottom: 15px;
+    width: 80%;
+    padding: 10px;
+    
+}
+
+.com {
+    display: block;
+    border: 2px solid #FAFAFA;
+    margin: 10px;
+    padding: 10ps;
+}
+
+#nuevoComen {
+    background-color: cornflowerblue;
+    opacity: 0.8;
+    grid-template-columns: auto auto auto;
+    margin:auto;
+    border-radius:15px;
+    margin-bottom: 15px;
+    padding: 10px;
+    width: 80%;
+}
+
+#formComen {
+    margin: 10px;
+    padding: 10px;
+}
+
+.coment_input {
+    display: block;
+    padding: :10px;
+    margin: 10px;
+}
+
+.opinion {
+    display: block;
+    border: 2px solid #AFAFAF;
+    margin: 5px;
+    padding: 5ps;
+}
+
+.sesion {
+    text-align: center;
+    background-color: darkgray;
+    margin: auto;
+    width: 65%;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#divSalas {
+    text-align: center;
+    background-color: darkgray;
+    margin: auto;
+    width: 65%;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#divAsientos {
+    text-align: center;
+    background-color: darkgray;
+    margin: auto;
+    width: 65%;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 5px;
 }

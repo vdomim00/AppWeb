@@ -1,45 +1,42 @@
 {% extends "./base.html" %}
 
 {% block contenido %}
-    <h1>Lista de sesiones disponibles</h1>
+    <h1 class="titulo">Lista de sesiones disponibles</h1>
 
-    <form action="/reservas" method="GET">{% csrf_token %}
+    <form class="sesion" action="/reservas" method="GET">{% csrf_token %}
         <label for="filtroPeli">Película</label>
         <select name="filtroPeli">
             {% for pelicula in peliculas %}
-                <option value="{{ pelicula.titulo }}" {% if filtroPeli == '{{ pelicula.titulo }}' %}selected{% endif %}/>
+                <option value="{{ pelicula.titulo }}" {% if filtroPeli == '{{ pelicula.titulo }}' %}selected{% endif %}>{{ pelicula.titulo|capfirst }}</option>
             {% endfor %}
         </select>
         <label for="filtroSesion">Sesion</label>
         <select name="filtroSesion">
             {% for sesion in sesiones %}
-                <option id="{{ sesion.id }}" value="{{ sesion.fecha }} - {{ sesion.hora }}"/>
+                <option value="{{ sesion.fecha|date:"Y-m-d" }}_{{ sesion.hora|time:"H:i" }}">{{ sesion.fecha }} - {{ sesion.hora|time:"H:i" }}</option>
             {% endfor %}
         </select>
         <input type="submit" value="Cargar">
     </form>
+
     <div id="divSalas">
         <label for="filtroSala">Sala</label>
-        <select id="filtroSala" name="filtroSala" onchange="filtroSala()">
+        <select id="filtroSala" name="filtroSala">
             {% for sala in salas %}
-                <option value="{{ sala.numeroSala }}"/>
+            <option value="{{ sala.numeroSala }}"> {{ sala.numeroSala }} </option>
             {% endfor %}
         </select>
+        <label for="filtroEntradas">Numero de entradas</label>
+        <input id="filtroEntradas" type="number" min="1" maxlength="2" max="99"/>
+        <input type="button" onclick="filtroSala()" value="Mostrar"/>
     </div>
 
     <div id="divAsientos">
-        {% if sala %}
-            <form id="checkReserva" action="" method="">
-            {% for counterFila in sala.numeroFilas %}
-                {% for counterColumna in sala.numeroAsientosFila %}
-                    <input type="checkbox" name="asiento"/>
-                {% endfor %}
-            {% endfor %}
-            {% for counterColumna in sala.numeroAsientosFila %}
-                    <input type="checkbox" name="asiento"/>
-            {% endfor %}
-            </form>
-        {% endif %}
+        <form id="formAsientos" action="" method="GET">
+            <div id="checkReserva">
+            </div>
+            <input type="submit" value="Reservar"/>
+        </form>
     </div>
 
 {% endblock %}

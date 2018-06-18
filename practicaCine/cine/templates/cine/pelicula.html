@@ -1,8 +1,13 @@
-<article class="cartelera">
-    <a href="detalle/{{ pelicula.id }}">
-        <img src='{{ pelicula.foto.url }}'/>
-        <h3>{{ pelicula.titulo }}</h3>
-    </a>
-    <p id="genero">{{ pelicula.genero }}</p>
-    <p id="sinopsis">{{ pelicula.sinopsis }}</p>
+<article class="pelicula">
+    <div class="foto_titulo">
+        <a class="enlace_peli" href="detalle/{{ pelicula.id }}">
+        <img class="portada" src='{{ pelicula.foto.url }}'/>
+        <h3 class="titulo_peli">{{ pelicula.titulo }}</h3>
+        </a>
+    </div>
+    <div class="info_peli">
+        <p id="genero"><h5>Género:</h5>{{ pelicula.genero }}</p>
+        <p id="sinopsis"><h5>Sinopsis:</h5>{{ pelicula.sinopsis }}</p>
+    </div>
+
 </article>

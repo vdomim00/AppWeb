@@ -5,7 +5,7 @@ class Pelicula(models.Model):
     titulo = models.CharField(max_length=200)
     director = models.CharField(max_length=200)
     genero = models.CharField(max_length=200)
-    sinopsis = models.CharField(max_length=200)
+    sinopsis = models.TextField()
     foto = models.ImageField()
     
 class Sala(models.Model):

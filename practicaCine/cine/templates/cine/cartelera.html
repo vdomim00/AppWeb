@@ -1,9 +1,9 @@
 {% extends "./base.html" %}
 
 {% block contenido %}
-    <h1>Películas en Cartelera</h1>
+    <h1 class="titulo">Películas en Cartelera</h1>
 
-    <form action="/cartelera" method="GET">{% csrf_token %}
+    <form id="filtros" action="/cartelera" method="GET">{% csrf_token %}
         <label for="q">Buscar por título o director: </label>
         <input type="text" name="q" value="{{ query|escape }}">
         <input type="submit" value="Buscar">
@@ -22,7 +22,7 @@
     </form>
 
     {% if query %}
-    <h2>Resultados para "{{ query|escape }}":</h2>
+    <h2 class="titulo">Resultados para "{{ query|escape }}":</h2>
         {% if peliculas %}
           <ul>
               {% for pelicula in peliculas %}
@@ -32,7 +32,7 @@
               {% endfor %}
           </ul>
         {% else %}
-          <p>No se encuentran peliculas</p>
+          <p class="titulo">No se encuentran peliculas</p>
         {% endif %}
     {% else %}
         {% if peliculas %}
