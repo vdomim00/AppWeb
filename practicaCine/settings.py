@@ -15,14 +15,14 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MEDIA_ROOT = os.path.join(BASE_DIR, '/static/cine/images')
+MEDIA_ROOT = os.path.join(BASE_DIR, '/static/cine/images/')
 MEDIA_URL = '/static/cine/images/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'dkm)2vsr_+4-esfu$x8rb3t)39n$0+wucv^-p$vy&@7@qx31u0'
+SECRET_KEY = '!#q0p+t)dii@-^f_*h_f!i)ugg!4ybm$f*)3^^8c#1=tlz)mc2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -33,13 +33,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'cine.apps.CineConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cine.apps.CineConfig',
 ]
 
 MIDDLEWARE = [
@@ -80,9 +80,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cine',
+        'PASSWORD': 'cine',
         'USER': 'cine',
         'HOST': 'localhost',
-        'PASSWORD': 'cine',
         'PORT': 3306,
     }
 }

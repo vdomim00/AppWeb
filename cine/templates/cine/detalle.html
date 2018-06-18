@@ -1,0 +1,64 @@
+{% extends "./base.html" %}
+
+{% block contenido %}
+    <h1>Detalle de Pelicula</h1>
+
+    {% if pelicula %}
+
+    <img src='{{ pelicula.foto.url }}'/>
+    <h5>{{ pelicula.titulo }}</h5>
+    <p id="director">{{ pelicula.director }}</p>
+    <p id="genero">{{ pelicula.genero }}</p>
+    <p id="sinopsis">{{ pelicula.sinopsis }}</p>
+
+    {% endif %}
+
+    {% if sesiones %}
+    <div id="sesiones">
+        <h4>Sesiones:</h4>
+        <ul>
+        {% for sesiones in sesiones %}
+            <li>
+                <h6>Día:</h6>
+                <p> {{ sesiones.fecha }}</p>
+                <h6>Hora:</h6>
+                <p> {{ sesiones.hora }}</p>
+                <h6>Sala:</h6>
+                <p> {{ sesiones.sala_id }}</p>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if comentarios %}
+    <div id="comentarios">
+        <h4>Comentarios:</h4>
+        <ul>
+        {% for comentarios in comentarios %}
+            <li>
+                <p> {{ comentarios.asunto }}</p>
+                <p> {{ comentarios.opinion }}</p>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div id="nuevoComen">
+        <h4>Opine sobre la película</h4>
+        <form id="formComen" action="{% url 'cine:guardar_comentario' %}" method='post'>
+            {% csrf_token %}
+                <input type="text" value="{{ pelicula.id }}" name="pelicula_id" hidden="true"/>
+                <div>
+                    <label for="asunto">Asunto</label>
+                    <input type="text" id="asunto" name="asunto"/>
+                </div>
+                <div>
+                    <label for="opinion">Opinion</label>
+                    <input type="text" id="opinion" name="opinion"/>
+                </div>
+                <input type="submit" value="Comentar"/>
+        </form>
+    </div>
+{% endblock %}
